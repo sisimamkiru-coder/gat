@@ -1552,6 +1552,7 @@ function AquaUI:CreateWindow(opts)
                             callback(opt)
                             -- close
                             opened = false
+                            f.ZIndex = defaultZIndex
                             Util.QuickTween(dropFrame, 0.2, {Size = UDim2.new(1, 0, 0, 0)})
                             Util.QuickTween(arrow, 0.2, {Rotation = 0})
                         end
@@ -1568,6 +1569,8 @@ function AquaUI:CreateWindow(opts)
             buildOptions()
             refreshDisplay()
 
+            local defaultZIndex = f.ZIndex
+
             local toggleDDBtn = Util.Create("TextButton", {
                 Size             = UDim2.new(1, 0, 0, 38),
                 BackgroundTransparency = 1,
@@ -1578,10 +1581,12 @@ function AquaUI:CreateWindow(opts)
             toggleDDBtn.MouseButton1Click:Connect(function()
                 opened = not opened
                 if opened then
+                    f.ZIndex = 100
                     local h = math.min(#options * 30 + 10, 180)
                     Util.QuickTween(dropFrame, 0.25, {Size = UDim2.new(1, 0, 0, h)})
                     Util.QuickTween(arrow, 0.25, {Rotation = 180})
                 else
+                    f.ZIndex = defaultZIndex
                     Util.QuickTween(dropFrame, 0.2, {Size = UDim2.new(1, 0, 0, 0)})
                     Util.QuickTween(arrow, 0.2, {Rotation = 0})
                 end
@@ -1879,6 +1884,8 @@ function AquaUI:CreateWindow(opts)
             end
 
             local pickerOpen = false
+            local pickerDefaultZIndex = f.ZIndex
+
             local togglePickerBtn = Util.Create("TextButton", {
                 Size             = UDim2.new(1, 0, 0, 38),
                 BackgroundTransparency = 1,
@@ -1888,6 +1895,11 @@ function AquaUI:CreateWindow(opts)
             })
             togglePickerBtn.MouseButton1Click:Connect(function()
                 pickerOpen = not pickerOpen
+                if pickerOpen then
+                    f.ZIndex = 100
+                else
+                    f.ZIndex = pickerDefaultZIndex
+                end
                 Util.QuickTween(pickerFrame, 0.25, {Size = pickerOpen and UDim2.new(1, 0, 0, 105) or UDim2.new(1, 0, 0, 0)})
             end)
             togglePickerBtn.MouseEnter:Connect(function() Util.QuickTween(f, 0.15, {BackgroundColor3 = Theme.ElementBgHover}) end)
